@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
@@ -25,7 +26,7 @@ public class FirstTab extends AbstractTabSetup {
 
 	private ArrayList<BufferedImage> mOriginalImageList;
 	private Dimension mSmallestImage;
-	private static final String DIRECTORY = "resources/S";
+	private static final String DIRECTORY = "resources/";
 	
 	public FirstTab() {
 		JPanel parentPanel = new JPanel(new BorderLayout());
@@ -50,11 +51,13 @@ public class FirstTab extends AbstractTabSetup {
 	public void populateOriginalImageList(String directory)
 	{
 		File file = new File(directory);
+		
 		ClassLoader loader;
 		try {
 			URL[] urlList = new URL[]{file.toURI().toURL()};
 			for(URL url : urlList)
 			{
+				
 				System.out.println(url.toString());
 			}
 			loader = new URLClassLoader(urlList);
@@ -73,6 +76,7 @@ public class FirstTab extends AbstractTabSetup {
 				dialog.setTitle("Image resize tester");
 				dialog.setSize(400, 400);
 				dialog.setVisible(true);
+				
 //				dialog.setMinimumSize(minimumSize);
 			}
 		};

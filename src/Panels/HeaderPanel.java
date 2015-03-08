@@ -9,7 +9,9 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.Paths;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -57,13 +59,14 @@ public class HeaderPanel extends JPanel {
 		JPanel panel = new JPanel(new BorderLayout());
 		JLabel label = new JLabel();
 		panel.add(label, BorderLayout.CENTER);
-		String path = "";
+		String path = "Images/";
 		ClassLoader cl = HeaderPanel.class.getClassLoader();
 		try {
 			BufferedImage image = ImageIO.read(cl.getResource(path
 					+ "Solar.jpg"));
+			System.out.println(Paths.get(cl.getResource(path).toURI()).toAbsolutePath().toString());
 			label.setIcon(new ImageIcon(image));
-		} catch (IOException e) {
+		} catch (IOException | URISyntaxException e) {
 			e.printStackTrace();
 		}
 
