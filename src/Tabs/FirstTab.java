@@ -2,6 +2,7 @@ package Tabs;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -21,43 +22,48 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import Panels.HeaderPanel;
+import Utils.ImageLoaderUtils;
 
 public class FirstTab extends AbstractTabSetup {
 
 	private ArrayList<BufferedImage> mOriginalImageList;
 	private Dimension mSmallestImage;
 	private static final String DIRECTORY = "resources/";
-	
+	private ImageLoaderUtils imageLoader;
+
 	public FirstTab() {
 		JPanel parentPanel = new JPanel(new BorderLayout());
 		this.setViewportView(parentPanel);
 		mOriginalImageList = new ArrayList<>();
 		mSmallestImage = new Dimension(-1, -1);
 		populateOriginalImageList(DIRECTORY);
+		File file = new File("C:/Users/Public/Pictures/Sample Pictures/");
+		imageLoader = new ImageLoaderUtils(file);
 		parentPanel.add(setup(), BorderLayout.CENTER);
+		
 	}
 
 	public JPanel setup() {
-		JPanel panel = new JPanel();
+		JPanel panel = new JPanel(new GridLayout(0,1));
 
 		JButton dialogButton = new JButton("Dialog");
 		dialogButton.addMouseListener(dialogButtonListener());
 
 		panel.add(dialogButton);
-
+		ArrayList<BufferedImage> imageArray = imageLoader.getUnalteredImages();
+		ImageIcon icon = new ImageIcon(imageArray.get(0));
+		panel.add(new JLabel(icon));
 		return panel;
 	}
-	
-	public void populateOriginalImageList(String directory)
-	{
+
+	public void populateOriginalImageList(String directory) {
 		File file = new File(directory);
-		
+
 		ClassLoader loader;
 		try {
-			URL[] urlList = new URL[]{file.toURI().toURL()};
-			for(URL url : urlList)
-			{
-				
+			URL[] urlList = new URL[] { file.toURI().toURL() };
+			for (URL url : urlList) {
+
 				System.out.println(url.toString());
 			}
 			loader = new URLClassLoader(urlList);
@@ -70,17 +76,16 @@ public class FirstTab extends AbstractTabSetup {
 	public MouseAdapter dialogButtonListener() {
 		MouseAdapter adapter = new MouseAdapter() {
 			@Override
-			public void mouseClicked(MouseEvent e)
-			{
+			public void mouseClicked(MouseEvent e) {
 				JDialog dialog = new JDialog();
 				dialog.setTitle("Image resize tester");
 				dialog.setSize(400, 400);
 				dialog.setVisible(true);
-				
-//				dialog.setMinimumSize(minimumSize);
+
+				// dialog.setMinimumSize(minimumSize);
 			}
 		};
-	return adapter;
+		return adapter;
 	}
 
 	public JPanel classLoaderSetup() {

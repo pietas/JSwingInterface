@@ -1,6 +1,7 @@
 package Tabs;
 
 import java.awt.BorderLayout;
+import java.awt.GridLayout;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -9,11 +10,15 @@ import java.nio.file.Paths;
 
 import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.filechooser.FileSystemView;
 
 import Panels.HeaderPanel;
+import Utils.ImageLoaderUtils;
 
 public class SecondTab extends AbstractTabSetup {
 	public SecondTab() {
@@ -23,28 +28,25 @@ public class SecondTab extends AbstractTabSetup {
 	}
 
 	public JPanel setup() {
-		JPanel panel = new JPanel();
-		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-		String path = "Images/";
-		ClassLoader cl = HeaderPanel.class.getClassLoader();
-		File directory;
-		try {
-			directory = new File(Paths.get(cl.getResource(path).toURI())
-					.toAbsolutePath().toString());
-			for (File file : directory.listFiles()) {
-				JLabel label = new JLabel();
-				BufferedImage image = ImageIO.read(file);
-				label.setIcon(new ImageIcon(image));
-				panel.add(label);
-			}
+		JPanel panel = new JPanel(new GridLayout(0, 4));
+		String path = "C:/Users/Public/Pictures/Sample Pictures/";
+		File directory = new File(path);
+		ImageLoaderUtils images = new ImageLoaderUtils(directory);
 
-			// Create file tree and use FileView to get icon of file.
-			for (File images : directory.listFiles()) {
-				System.out.println(images.toString());
-			}
-		} catch (URISyntaxException | IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		for (BufferedImage image : images.getUnalteredImages()) {
+
+		}
+
+		int i = 0;
+		// Create file tree and use FileView to get icon of file.
+		for (BufferedImage image : images.getUnalteredImages()) {
+			System.out.println(image.toString());
+			JLabel label = new JLabel();
+			label.setIcon(new ImageIcon(images.getScaledImage(i)));
+			label.setSize(94, 94);
+			System.out.println("Label width X height: " + images.getScaledImage(i).getWidth() + " x " +  images.getScaledImage(i).getHeight());
+			panel.add(label);
+			i++;
 		}
 
 		return panel;
